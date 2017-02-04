@@ -112,7 +112,7 @@ let g:ale_statusline_format = get(g:, 'ale_statusline_format',
 let g:ale_warn_about_trailing_whitespace =
 \   get(g:, 'ale_warn_about_trailing_whitespace', 1)
 
-function! ALEInitAuGroups()
+function! s:ALEInitAuGroups() abort
     augroup ALERunOnTextChangedGroup
         autocmd!
         if g:ale_enabled && g:ale_lint_on_text_changed
@@ -142,7 +142,7 @@ function! ALEInitAuGroups()
     augroup END
 endfunction
 
-function! ALEToggle()
+function! s:ALEToggle() abort
     let g:ale_enabled = !get(g:, 'ale_enabled')
 
     if g:ale_enabled
@@ -150,15 +150,15 @@ function! ALEToggle()
     else
         let l:buffers = keys(g:ale_buffer_info)
 
-        for buffer in l:buffers
-            call ale#engine#SetResults(buffer, [])
+        for l:buffer in l:buffers
+            call ale#engine#SetResults(l:buffer, [])
         endfor
     endif
 
-    call ALEInitAuGroups()
+    call s:ALEInitAuGroups()
 endfunction
 
-call ALEInitAuGroups()
+call s:ALEInitAuGroups()
 
 " Define commands for moving through warnings and errors.
 command! ALEPrevious :call ale#loclist_jumping#Jump('before', 0)
@@ -166,7 +166,7 @@ command! ALEPreviousWrap :call ale#loclist_jumping#Jump('before', 1)
 command! ALENext :call ale#loclist_jumping#Jump('after', 0)
 command! ALENextWrap :call ale#loclist_jumping#Jump('after', 1)
 
-command! ALEToggle :call ALEToggle()
+command! ALEToggle :call s:ALEToggle()
 
 " Define command to get information about current filetype.
 command! ALEInfo :call ale#linter#Info()
